@@ -79,7 +79,11 @@ export default class Start extends React.Component {
                 name: this.state.name,
                 background: this.state.background
               })}
-            >Start Chatting Here</Button>
+            >
+              <Text style={styles.chatText}>
+                Start Chatting
+              </Text>
+            </Button>
           </View>
         </ImageBackground >
       </View >
@@ -118,10 +122,11 @@ const styles = StyleSheet.create({
     width: '88%',
     justifyContent: 'space-around',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
 
   inputBox: {
-    borderWith: 2,
+    borderWidth: 2,
     borderRadius: 1,
     borderColor: 'gray',
     width: '88%',
@@ -148,7 +153,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '300',
     color: '#757083',
-    opacity: 100,
+    opacity: 1,
   },
 
   colorArry: {
@@ -182,11 +187,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: 16,
-    fontWeight: '600',
-    color: 'white',
     backgroundColor: '#757083',
   },
 
+  chatText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: 'white',
+  },
 
 })

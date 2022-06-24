@@ -2,6 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 export default class Chat extends React.Component {
+  constructor() {
+    super();
+  };
+
 
   render() {
     let name = this.props.route.params.name;
@@ -11,7 +15,7 @@ export default class Chat extends React.Component {
 
     return (
       <View style={styles.chatView}>
-
+        <Text>Hello World</Text>
       </View>
     )
   }
