@@ -8,12 +8,12 @@ export default class Start extends React.Component {
     super(props);
     this.state = {
       name: '',
-      background: ''
+      chatBackground: '',
     };
   }
 
   changeBackground = (newColor) => {
-    this.setState({ background: newColor });
+    this.setState({ chatBackground: newColor });
   };
 
   colors = {
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
 
-  colorArry: {
+  colorArray: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '80%',
