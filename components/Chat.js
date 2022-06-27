@@ -51,7 +51,7 @@ export default class Chat extends React.Component {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#474056'
+            backgroundColor: '#f6546a' //salmon pink color
           }
         }}
       />
@@ -66,7 +66,7 @@ export default class Chat extends React.Component {
     return (
       <View style={{ backgroundColor: chatBackground, flex: 1 }}>
         <GiftedChat
-
+          renderBubble={this.renderBubble.bind(this)}
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
           user={{
