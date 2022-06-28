@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, TextInput, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, Button, Pressable, TextInput, ImageBackground, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import BackgroundImage from '../assets/Background-Image.png';
 
@@ -72,7 +72,7 @@ export default class Start extends React.Component {
             </View>
 
             {/* sends user to Chat screen page */}
-            <Button
+            <Pressable
               style={styles.chatButton}
               title="Start Chatting"
               onPress={() => this.props.navigation.navigate('Chat', {
@@ -83,7 +83,7 @@ export default class Start extends React.Component {
               <Text style={styles.chatText}>
                 Start Chatting
               </Text>
-            </Button>
+            </Pressable>
           </View>
         </ImageBackground >
       </View >
