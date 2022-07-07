@@ -58,15 +58,6 @@ export default class Chat extends React.Component {
 
     const messagesCollection = collection(db, 'messages');
 
-    this.setState({
-      messages: [],
-      user: {
-        _id: user._id,
-        name: name,
-        avatar: "https://placeimg.com/140/140/any",
-      },
-    });
-
     const unsubAuth = onAuthStateChanged(auth, (user) => {
       console.log('user status changed: ', user)
       if (!user) {
@@ -101,18 +92,9 @@ export default class Chat extends React.Component {
 
   //unsubscribing
   componentWillUnmount() {
-    this.unsubCol();
-    this.unsubAuth();
+    unsubCol();
+    unsubAuth();
   };
-
-  addMessage(message) {
-    addDoc(messagesCollection, {
-      _id: message._id,
-      text: message.text || '',
-      createdAt: message.createdAt,
-      user: message.user,
-    });
-  }
 
   /* called when a user sends a message, appends new message to the messages object */
   onSend(messages = []) {
@@ -122,6 +104,18 @@ export default class Chat extends React.Component {
       this.addMessage();
     });
   }
+
+  addMessage(message) {
+    addDoc(messagesCollection, {
+      uid: this.state.uid,
+      _id: message._id,
+      text: message.text || '',
+      createdAt: message.createdAt,
+      user: message.user,
+    });
+  }
+
+
 
   renderBubble(props) {
     return (
