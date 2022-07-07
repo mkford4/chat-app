@@ -10,7 +10,9 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "~1.17.3",
     "@react-native-community/masked-view": "^0.1.11",
+    "@react-native-community/netinfo": "8.2.0",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/stack": "^6.2.1",
     "expo": "~45.0.0",
@@ -30,5 +32,16 @@
   "devDependencies": {
     "@babel/core": "^7.12.9"
   },
-  "private": true
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkford4/chat-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mkford4/chat-app/issues"
+  },
+  "homepage": "https://github.com/mkford4/chat-app#readme",
+  "description": ""
 }
