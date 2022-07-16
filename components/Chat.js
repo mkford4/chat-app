@@ -3,6 +3,7 @@ import { View, Text, Platform, KeyboardAvoidingView, StyleSheet } from 'react-na
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 //import NetInfo from '@react-native-community/netinfo';
+import uuid from 'react-native-uuid';
 
 //installing & initializing Firestore
 import { initializeApp } from 'firebase/app';
@@ -38,9 +39,10 @@ const messagesCollection = collection(db, 'messages');
 export default class Chat extends React.Component {
   constructor() {
     super();
+    this.onSend = this.onSend.bind(this)
+    this.renderBubble = this.renderBubble.bind(this)
     this.state = {
       messages: [],
-      uid: 0,
       user: {
         _id: '',
         name: '',
@@ -57,21 +59,31 @@ export default class Chat extends React.Component {
     this.props.navigation.setOptions({ title: name });
 
     const messagesCollection = collection(db, 'messages');
+    // TODO: get the user id by collecion
+    // const usersCollection = collection(db, 'users');
 
-    const unsubAuth = onAuthStateChanged(auth, (user) => {
+    const user = {
+      name,
+      avatar: 'https://placeimg.com/140/140/any',
+      // _id: uuid.parse(name)
+      _id: 1
+    }
+
+    this.setState({ user })
+
+    this.unsubAuth = onAuthStateChanged(auth, (user) => {
       console.log('user status changed: ', user)
       if (!user) {
         signInAnonymously();
       } else {
         this.setState({
-          uid: user.uid,
           loggedInText: 'Hello there',
         })
       }
     })
 
     //real time collection data
-    const unsubCol = onSnapshot(messagesCollection, (snapshot) => {
+    this.unsubCol = onSnapshot(messagesCollection, (snapshot) => {
       let messages = []
       snapshot.docs.forEach((doc) => {
         let data = doc.data();
@@ -92,24 +104,24 @@ export default class Chat extends React.Component {
 
   //unsubscribing
   componentWillUnmount() {
-    unsubCol();
-    unsubAuth();
+    this.unsubCol();
+    this.unsubAuth();
   };
 
-  /* called when a user sends a message, appends new message to the messages object */
   onSend(messages = []) {
+    console.log(messages)
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }), () => {
-      this.addMessage();
+      messages.forEach(this.addMessage);
     });
   }
 
   addMessage(message) {
     addDoc(messagesCollection, {
-      uid: this.state.uid,
-      _id: message._id,
-      text: message.text || '',
+      uid: uuid.v4(),
+      // _id: message._id,
+      text: message.text,
       createdAt: message.createdAt,
       user: message.user,
     });
@@ -136,14 +148,10 @@ export default class Chat extends React.Component {
     return (
       <View style={{ backgroundColor: chatBackground, flex: 1 }}>
         <GiftedChat
-          renderBubble={this.renderBubble.bind(this)}
+          renderBubble={this.renderBubble}
           messages={this.state.messages}
-          onSend={messages => this.onSend(messages)}
-          user={{
-            _id: 1,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any'
-          }}
+          onSend={this.onSend}
+          user={this.state.user}
         />
         {Platform.OS === 'android' ? <KeyboardAvoidingView behavior='height' /> : null
         }

@@ -56,19 +56,19 @@ export default class Start extends React.Component {
               <TouchableOpacity
                 style={styles.color1}
                 onPress={() => this.changeBackground(this.colors.black)}
-              ></TouchableOpacity>
+              />
               <TouchableOpacity
                 style={[styles.color1, styles.color2]}
                 onPress={() => this.changeBackground(this.colors.purple)}
-              ></TouchableOpacity>
+              />
               <TouchableOpacity
                 style={[styles.color1, styles.color3]}
                 onPress={() => this.changeBackground(this.colors.blue)}
-              ></TouchableOpacity>
+              />
               <TouchableOpacity
                 style={[styles.color1, styles.color4]}
                 onPress={() => this.changeBackground(this.colors.green)}
-              ></TouchableOpacity>
+              />
             </View>
 
             {/* sends user to Chat screen page */}
