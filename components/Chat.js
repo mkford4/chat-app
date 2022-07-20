@@ -90,38 +90,39 @@ export default class Chat extends React.Component {
       } else {
         console.log('offline');
       }
-      //Authenticates user via Firebase
-      this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
-        if (!user) {
-          firebase.auth().signInAnonymously();
-        }
-        this.setState({
-          uid: user.uid,
-          messages: [],
-          user: {
-            _id: user.uid,
-            name: name,
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        });
-        this.referenceMessageUser = firebase
-          .firestore()
-          .collection('messages')
-          .where('uid', '==', this.state.uid);
-        this.saveMessages();
-        this.unsubscribe = this.referenceChatMessages
-          .orderBy('createdAt', 'desc')
-          .onSnapshot(this.onCollectionUpdate);
-      });
     });
 
-    this.getMessages();
+    //Authenticates user via Firebase
+    this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        firebase.auth().signInAnonymously();
+      }
+      this.setState({
+        uid: user.uid,
+        messages: [],
+        user: {
+          _id: user.uid,
+          name: name,
+          avatar: 'https://placeimg.com/140/140/any',
+        },
+      });
+      this.referenceMessageUser = firebase
+        .firestore()
+        .collection('messages')
+        .where('uid', '==', this.state.uid);
+      this.saveMessages();
+      this.unsubscribe = this.referenceChatMessages
+        .orderBy('createdAt', 'desc')
+        .onSnapshot(this.onCollectionUpdate);
+    });
   }
 
   //stop listening
   componentWillUnmount() {
-    this.authUnsubscribe();
-    this.unsubscribe();
+    if (this.state.isConnected) {
+      this.authUnsubscribe();
+      //this.unsubscribe();
+    }
   }
   //adds chat messages to Firebase db
   addMessages() {
