@@ -2,44 +2,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { ActionSheetIOS, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-
-import { useActionSheet } from '@expo/react-native-action-sheet';
 
 import firebase from 'firebase';
 import 'firebase/firestore';
 
+import MapView from 'react-native-maps';
+
 export default class CustomActions extends React.Component {
-
-  //upload images to Firebase & convert to blob
-  imageUpload = async (uri) => {
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function (e) {
-        console.log(e);
-        reject(new TypeError('Network request failed'));
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', uri, true);
-      xhr.send(null);
-    });
-
-    const imageNameBefore = uri.split('/');
-    const imageName = imageNameBefore[imageNameBefore.length - 1];
-
-    const ref = firebase.storage().ref().child(`images/${imageName}`);
-    const snapshot = await ref.put(blob);
-
-    blob.close();
-
-    return await snapshot.ref.getDownloadURL();
-  }
-
   //user picks image from image library
   pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionAsync();
@@ -78,6 +49,33 @@ export default class CustomActions extends React.Component {
     }
   }
 
+  //upload images to Firebase & convert to blob
+  imageUpload = async (uri) => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+
+    const imageNameBefore = uri.split('/');
+    const imageName = imageNameBefore[imageNameBefore.length - 1];
+
+    const ref = firebase.storage().ref().child(`images/${imageName}`);
+    const snapshot = await ref.put(blob);
+
+    blob.close();
+
+    return await snapshot.ref.getDownloadURL();
+  }
+
   //get user location via GPS
   getLocation = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -101,7 +99,26 @@ export default class CustomActions extends React.Component {
     }
   }
 
-  //Action Sheet
+  //Map location
+  renderCustomView(props) {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
+  }
+
+  //Action Sheet with options
   onActionPress = () => {
     const options = [
       'Choose from Library',
@@ -139,8 +156,9 @@ export default class CustomActions extends React.Component {
         accessibilityLabel='More options'
         accessibilityHint='Options to send an image, take photo, or send location'
         style={{ width: 26, height: 26, marginLeft: 10, marginBottom: 10 }}
-        onPress={this.onActionPress}>
-        <View style={[styles.wrapper, this.props.wrapperSTyle]}>
+        onPress={this.onActionPress}
+        renderCustomView={this.renderCustomView}>
+        <View style={[styles.wrapper, this.props.wrapperStyle]}>
           <Text style={[styles.iconText, this.props.iconTextStyle]}>+</Text>
         </View>
       </TouchableOpacity>
