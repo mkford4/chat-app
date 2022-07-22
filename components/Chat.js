@@ -38,6 +38,8 @@ export default class Chat extends React.Component {
         avatar: '',
       },
       isConnected: false,
+      image: null,
+      location: null,
     }
     //initialize Firestore
     if (!firebase.apps.length) {
@@ -159,7 +161,13 @@ export default class Chat extends React.Component {
         _id: data._id,
         text: data.text,
         createdAt: data.createdAt.toDate(),
-        user: data.user,
+        user: {
+          _id: data.user._id,
+          name: data.user.name,
+          avatar: data.user.avatar
+        },
+        image: data.image || null,
+        location: data.location || null,
       });
     });
     this.setState({
@@ -225,7 +233,7 @@ export default class Chat extends React.Component {
           renderBubble={this.renderBubble}
           messages={this.state.messages}
           renderInputToolbar={this.renderInputToolbar}
-          renderCustomActions={this.renderCustomActions}
+          renderActions={this.renderCustomActions}
           //renderCustomView={this.renderCustomView}
           onSend={this.onSend}
           user={{
