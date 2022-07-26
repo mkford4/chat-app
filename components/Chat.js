@@ -5,9 +5,10 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
+import uuid from 'react-native-uuid'
 
 import CustomActions from './CustomActions';
-//import MapView from 'react-native-maps';
+import MapView from 'react-native-maps';
 
 //Firestore
 const firebase = require('firebase');
@@ -141,6 +142,8 @@ export default class Chat extends React.Component {
       text: message.text || '',
       createdAt: message.createdAt,
       user: message.user,
+      location: message.location || null,
+      image: message.image || null,
     });
   }
 
@@ -188,6 +191,19 @@ export default class Chat extends React.Component {
   }
 
   renderBubble(props) {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      console.log(currentMessage)
+      return <MapView
+        style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
+        region={{
+          latitude: currentMessage.location.latitude,
+          longitude: currentMessage.location.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      />
+    }
     return (
       <Bubble
         {...props}
@@ -201,28 +217,27 @@ export default class Chat extends React.Component {
   }
 
   renderCustomActions = (props) => {
-    return <CustomActions {...props} />;
-  };
+    let { name } = this.props.route.params;
 
-  /*
-    renderCustomView(props) {
-      const { currentMessage } = props;
-      if (currentMessage.location) {
-        return (
-          <MapView
-            style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
-            region={{
-              latitude: currentMessage.location.latitude,
-              longitude: currentMessage.location.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-          />
-        );
-      }
-      return null;
+    const setLocationMessageLocation = (location) => {
+      const newMessages = [{
+        _id: uuid.v4(),
+        text: 'My location',
+        location: {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        },
+        createdAt: new Date(),
+        user: {
+          _id: this.state.user._id,
+          name: name,
+          avatar: this.state.user.avatar,
+        },
+      }]
+      this.onSend(newMessages)
     }
-    */
+    return <CustomActions {...props} locationFn={setLocationMessageLocation} />;
+  };
 
   render() {
     let { chatBackground, name } = this.props.route.params;
@@ -233,8 +248,7 @@ export default class Chat extends React.Component {
           renderBubble={this.renderBubble}
           messages={this.state.messages}
           renderInputToolbar={this.renderInputToolbar}
-          renderActions={this.renderCustomActions}
-          //renderCustomView={this.renderCustomView}
+          renderActions={this.renderCustomActions.bind(this)}
           onSend={this.onSend}
           user={{
             _id: this.state.user._id,
