@@ -44,8 +44,16 @@ This app uses Google Firebase (version 7) for data storage to store messages and
 - Reference your 'messages' collection in Chat.js
 ![firebase2](https://user-images.githubusercontent.com/91907563/180576257-b0a97979-b47f-42a2-b47a-11a2f5166780.png)
 
-Gifted Chat
-![IMG-5565](https://user-images.githubusercontent.com/91907563/181059038-cb9a47e9-6add-4e0a-8e3c-bcff9313bd88.PNG) ![IMG-5566](https://user-images.githubusercontent.com/91907563/181059053-03f7063f-5c35-493a-88fb-8c4ecb54826d.PNG)
+Gifted Chat & Custom Actions
+Includes:
+- Sending text chat messages that upload to Firebase database
+- Customizing background color and name for the user
+- Customizing the chat bubble colors and service messages in Start.js and Chat.js files
+- Creating a CustomActions.js file that uses the ActionSheet to allow user to send their location, an image from their library, and/or take a photo to send in that chat. Images are then uploaded to the Firebase storage images folder
+- Import ImagePicker and Location from Expo for CustomActions component:
+import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
+- Create a '+' button (TouchableOpacity) that users press to view CustomAction options via onActionPress function that is imported and executed in Chat.js render
 
-Custom Actions
+![chat-app-documentation-image](https://user-images.githubusercontent.com/91907563/181059910-d5e0a5d9-89c7-4dea-ac59-a3b7b6187254.jpg)
 
