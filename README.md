@@ -44,4 +44,8 @@ This app uses Google Firebase (version 7) for data storage to store messages and
 - Reference your 'messages' collection in Chat.js
 ![firebase2](https://user-images.githubusercontent.com/91907563/180576257-b0a97979-b47f-42a2-b47a-11a2f5166780.png)
 
+Gifted Chat
+![IMG-5565](https://user-images.githubusercontent.com/91907563/181059038-cb9a47e9-6add-4e0a-8e3c-bcff9313bd88.PNG) ![IMG-5566](https://user-images.githubusercontent.com/91907563/181059053-03f7063f-5c35-493a-88fb-8c4ecb54826d.PNG)
+
+Custom Actions
 
