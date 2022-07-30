@@ -57,3 +57,9 @@ import * as Location from 'expo-location';
 
 ![chat-app-documentation-image](https://user-images.githubusercontent.com/91907563/181059910-d5e0a5d9-89c7-4dea-ac59-a3b7b6187254.jpg)
 
+In order, the above screenshot depicts the Chat App's various features.
+1. "Start" screen- Users type their name and choose their background color preference before entering the chat.
+2. "Chat" screen- Users can send text messages to chat.
+3. "Chat" screen- Shown: ActionSheet with options for user to send an image in their library, take a photo, send their location, or cancel.
+4. "Chat" screen- Users can send images & their location to the chat. Images get stored in Firebase Storage 'images' folder.
+
